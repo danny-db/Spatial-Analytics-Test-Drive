@@ -1,0 +1,234 @@
+{
+  "datasets": [
+    {
+      "name": "533a09a5",
+      "displayName": "Urban Tree Survey Silver Data",
+      "queryLines": [
+        "SELECT * FROM danny_catalog.demo_schema.tree_points_silver"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "c6cd42d5",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "98b5fd4f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "533a09a5",
+                  "fields": [
+                    {
+                      "name": "commodity",
+                      "expression": "`commodity`"
+                    },
+                    {
+                      "name": "latitude",
+                      "expression": "`latitude`"
+                    },
+                    {
+                      "name": "longitude",
+                      "expression": "`longitude`"
+                    },
+                    {
+                      "name": "hectares",
+                      "expression": "`hectares`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "symbol-map",
+              "encodings": {
+                "coordinates": {
+                  "latitude": {
+                    "fieldName": "latitude",
+                    "displayName": "latitude"
+                  },
+                  "longitude": {
+                    "fieldName": "longitude",
+                    "displayName": "longitude"
+                  }
+                },
+                "color": {
+                  "fieldName": "commodity",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "commodity"
+                },
+                "size": {
+                  "fieldName": "hectares",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "hectares"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "b9374186",
+            "queries": [
+              {
+                "name": "dashboards/01f0833f4eed1b86a5b34669a040c34a/datasets/01f0833f545614efb11421f4b788bf81_commodity",
+                "query": {
+                  "datasetName": "533a09a5",
+                  "fields": [
+                    {
+                      "name": "commodity",
+                      "expression": "`commodity`"
+                    },
+                    {
+                      "name": "commodity_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "commodity",
+                    "displayName": "commodity",
+                    "queryName": "dashboards/01f0833f4eed1b86a5b34669a040c34a/datasets/01f0833f545614efb11421f4b788bf81_commodity"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Commodity"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "e5af2e82",
+            "queries": [
+              {
+                "name": "dashboards/01f0833f4eed1b86a5b34669a040c34a/datasets/01f0833f545614efb11421f4b788bf81_year",
+                "query": {
+                  "datasetName": "533a09a5",
+                  "fields": [
+                    {
+                      "name": "year",
+                      "expression": "`year`"
+                    },
+                    {
+                      "name": "year_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "year",
+                    "displayName": "year",
+                    "queryName": "dashboards/01f0833f4eed1b86a5b34669a040c34a/datasets/01f0833f545614efb11421f4b788bf81_year"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Year"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "f6dd3386",
+            "queries": [
+              {
+                "name": "dashboards/01f0833f4eed1b86a5b34669a040c34a/datasets/01f0833f545614efb11421f4b788bf81_hectares",
+                "query": {
+                  "datasetName": "533a09a5",
+                  "fields": [
+                    {
+                      "name": "min(hectares)",
+                      "expression": "MIN(`hectares`)"
+                    },
+                    {
+                      "name": "max(hectares)",
+                      "expression": "MAX(`hectares`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "range-slider",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "hectares",
+                    "displayName": "hectares",
+                    "queryName": "dashboards/01f0833f4eed1b86a5b34669a040c34a/datasets/01f0833f545614efb11421f4b788bf81_hectares"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Hectares"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

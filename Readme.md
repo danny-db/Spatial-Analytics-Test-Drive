@@ -1,4 +1,3 @@
-%md
 # Spatial Analytics Test Drive
 
 This project provides hands-on examples and tutorials to help you get started with spatial data analysis and visualisation on Databricks, with a special focus on Australian-based datasets.

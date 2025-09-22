@@ -1,0 +1,488 @@
+{
+  "datasets": [
+    {
+      "name": "f06a4f34",
+      "displayName": "Road Crash Data",
+      "queryLines": [
+        "SELECT * FROM danny_catalog.dtp_schema.victorian_road_crash_data"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "0c1e38b1",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "270a84a9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "LGA_NAME",
+                      "expression": "`LGA_NAME`"
+                    },
+                    {
+                      "name": "LATITUDE",
+                      "expression": "`LATITUDE`"
+                    },
+                    {
+                      "name": "LONGITUDE",
+                      "expression": "`LONGITUDE`"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "symbol-map",
+              "encodings": {
+                "coordinates": {
+                  "latitude": {
+                    "fieldName": "LATITUDE",
+                    "displayName": "LATITUDE"
+                  },
+                  "longitude": {
+                    "fieldName": "LONGITUDE",
+                    "displayName": "LONGITUDE"
+                  }
+                },
+                "color": {
+                  "fieldName": "LGA_NAME",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "LGA_NAME"
+                },
+                "size": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of Records"
+                },
+                "extra": [
+                  {
+                    "fieldName": "count(*)",
+                    "displayName": "Count of Records"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Accident Hotspot maps\n"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 13
+          }
+        },
+        {
+          "widget": {
+            "name": "7ad25fbf",
+            "queries": [
+              {
+                "name": "dashboards/01f08781b209173eae8ca218b8dcccb6/datasets/01f08781b8e21ce19660053cdf18d168_LGA_NAME",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "LGA_NAME",
+                      "expression": "`LGA_NAME`"
+                    },
+                    {
+                      "name": "LGA_NAME_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "LGA_NAME",
+                    "displayName": "LGA_NAME",
+                    "queryName": "dashboards/01f08781b209173eae8ca218b8dcccb6/datasets/01f08781b8e21ce19660053cdf18d168_LGA_NAME"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "LGA"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "75fb61e0",
+            "queries": [
+              {
+                "name": "dashboards/01f08781b209173eae8ca218b8dcccb6/datasets/01f08781b8e21ce19660053cdf18d168_ACCIDENT_DATE",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "ACCIDENT_DATE",
+                      "expression": "`ACCIDENT_DATE`"
+                    },
+                    {
+                      "name": "ACCIDENT_DATE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ACCIDENT_DATE",
+                    "displayName": "ACCIDENT_DATE",
+                    "queryName": "dashboards/01f08781b209173eae8ca218b8dcccb6/datasets/01f08781b8e21ce19660053cdf18d168_ACCIDENT_DATE"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Date"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "1782f294",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "monthly(ACCIDENT_DATE)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `ACCIDENT_DATE`)"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(ACCIDENT_DATE)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "ACCIDENT_DATE"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of Records"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Count of accidents over time"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "0bd4b2a9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "count(ACCIDENT_NO)",
+                      "expression": "COUNT(`ACCIDENT_NO`)"
+                    },
+                    {
+                      "name": "SPEED_ZONE",
+                      "expression": "`SPEED_ZONE`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "count(ACCIDENT_NO)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of ACCIDENT_NO"
+                },
+                "color": {
+                  "fieldName": "SPEED_ZONE",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "SPEED_ZONE"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Accidents by Speed Zone",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 14,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f83b9cd6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "ACCIDENT_TYPE",
+                      "expression": "`ACCIDENT_TYPE`"
+                    },
+                    {
+                      "name": "DAY_OF_WEEK",
+                      "expression": "`DAY_OF_WEEK`"
+                    },
+                    {
+                      "name": "count(ACCIDENT_NO)",
+                      "expression": "COUNT(`ACCIDENT_NO`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "DAY_OF_WEEK",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  },
+                  "displayName": "DAY_OF_WEEK"
+                },
+                "y": {
+                  "fieldName": "count(ACCIDENT_NO)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of ACCIDENT_NO"
+                },
+                "color": {
+                  "fieldName": "ACCIDENT_TYPE",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "ACCIDENT_TYPE"
+                }
+              },
+              "frame": {
+                "title": "Accidents by Day of the Week by accident type",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "e56456c0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "sum(INJ_OR_FATAL)",
+                      "expression": "SUM(`INJ_OR_FATAL`)"
+                    },
+                    {
+                      "name": "SEVERITY",
+                      "expression": "`SEVERITY`"
+                    },
+                    {
+                      "name": "SPEED_ZONE",
+                      "expression": "`SPEED_ZONE`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "heatmap",
+              "encodings": {
+                "x": {
+                  "fieldName": "SEVERITY",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "SEVERITY"
+                },
+                "y": {
+                  "fieldName": "SPEED_ZONE",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "SPEED_ZONE"
+                },
+                "color": {
+                  "fieldName": "sum(INJ_OR_FATAL)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Sum of INJ_OR_FATAL"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Speed zone injury heatmap"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 20,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "a44d8b2d",
+            "queries": [
+              {
+                "name": "dashboards/01f08781b209173eae8ca218b8dcccb6/datasets/01f08781b8e21ce19660053cdf18d168_ACCIDENT_TYPE",
+                "query": {
+                  "datasetName": "f06a4f34",
+                  "fields": [
+                    {
+                      "name": "ACCIDENT_TYPE",
+                      "expression": "`ACCIDENT_TYPE`"
+                    },
+                    {
+                      "name": "ACCIDENT_TYPE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ACCIDENT_TYPE",
+                    "displayName": "ACCIDENT_TYPE",
+                    "queryName": "dashboards/01f08781b209173eae8ca218b8dcccb6/datasets/01f08781b8e21ce19660053cdf18d168_ACCIDENT_TYPE"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Accident type"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

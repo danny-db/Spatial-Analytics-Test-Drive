@@ -1,0 +1,342 @@
+{
+  "datasets": [
+    {
+      "name": "d929da13",
+      "displayName": "copper_silver",
+      "queryLines": [
+        "SELECT * FROM danny_catalog.dem_schema.copper_silver"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "dd2b66a0",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "8f3c4bd9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d929da13",
+                  "fields": [
+                    {
+                      "name": "ANALYSIS_METHOD",
+                      "expression": "`ANALYSIS_METHOD`"
+                    },
+                    {
+                      "name": "LATITUDE_GDA2020",
+                      "expression": "`LATITUDE_GDA2020`"
+                    },
+                    {
+                      "name": "LONGITUDE_GDA2020",
+                      "expression": "`LONGITUDE_GDA2020`"
+                    },
+                    {
+                      "name": "Times_Crustal_Abundance",
+                      "expression": "`Times_Crustal_Abundance`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "symbol-map",
+              "encodings": {
+                "coordinates": {
+                  "latitude": {
+                    "fieldName": "LATITUDE_GDA2020",
+                    "displayName": "LATITUDE_GDA2020"
+                  },
+                  "longitude": {
+                    "fieldName": "LONGITUDE_GDA2020",
+                    "displayName": "LONGITUDE_GDA2020"
+                  }
+                },
+                "color": {
+                  "fieldName": "ANALYSIS_METHOD",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "ANALYSIS_METHOD"
+                },
+                "size": {
+                  "fieldName": "Times_Crustal_Abundance",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Times_Crustal_Abundance"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "f457020a",
+            "queries": [
+              {
+                "name": "dashboards/01f0973a962d1727a32b1a657d9b6237/datasets/01f0973aa93c1fc38d9f368dfc7a6467_DRILLHOLE_NAME",
+                "query": {
+                  "datasetName": "d929da13",
+                  "fields": [
+                    {
+                      "name": "DRILLHOLE_NAME",
+                      "expression": "`DRILLHOLE_NAME`"
+                    },
+                    {
+                      "name": "DRILLHOLE_NAME_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "DRILLHOLE_NAME",
+                    "displayName": "DRILLHOLE_NAME",
+                    "queryName": "dashboards/01f0973a962d1727a32b1a657d9b6237/datasets/01f0973aa93c1fc38d9f368dfc7a6467_DRILLHOLE_NAME"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Name"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "f9296689",
+            "queries": [
+              {
+                "name": "dashboards/01f0973a962d1727a32b1a657d9b6237/datasets/01f0973aa93c1fc38d9f368dfc7a6467_ANALYSIS_METHOD",
+                "query": {
+                  "datasetName": "d929da13",
+                  "fields": [
+                    {
+                      "name": "ANALYSIS_METHOD",
+                      "expression": "`ANALYSIS_METHOD`"
+                    },
+                    {
+                      "name": "ANALYSIS_METHOD_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ANALYSIS_METHOD",
+                    "displayName": "ANALYSIS_METHOD",
+                    "queryName": "dashboards/01f0973a962d1727a32b1a657d9b6237/datasets/01f0973aa93c1fc38d9f368dfc7a6467_ANALYSIS_METHOD"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Analysis method"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "79cf175a",
+            "queries": [
+              {
+                "name": "dashboards/01f0973a962d1727a32b1a657d9b6237/datasets/01f0973aa93c1fc38d9f368dfc7a6467_Times_Crustal_Abundance",
+                "query": {
+                  "datasetName": "d929da13",
+                  "fields": [
+                    {
+                      "name": "min(Times_Crustal_Abundance)",
+                      "expression": "MIN(`Times_Crustal_Abundance`)"
+                    },
+                    {
+                      "name": "max(Times_Crustal_Abundance)",
+                      "expression": "MAX(`Times_Crustal_Abundance`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "range-slider",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "Times_Crustal_Abundance",
+                    "displayName": "Times_Crustal_Abundance",
+                    "queryName": "dashboards/01f0973a962d1727a32b1a657d9b6237/datasets/01f0973aa93c1fc38d9f368dfc7a6467_Times_Crustal_Abundance"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Crustal abundance"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "2c076283",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d929da13",
+                  "fields": [
+                    {
+                      "name": "ANALYSIS_METHOD",
+                      "expression": "`ANALYSIS_METHOD`"
+                    },
+                    {
+                      "name": "count(*)",
+                      "expression": "COUNT(`*`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "ANALYSIS_METHOD",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "ANALYSIS_METHOD"
+                },
+                "y": {
+                  "fieldName": "count(*)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count of Records"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Count per analysis method"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 13,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "7a3db112",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "d929da13",
+                  "fields": [
+                    {
+                      "name": "ZONE_GDA2020",
+                      "expression": "`ZONE_GDA2020`"
+                    },
+                    {
+                      "name": "avg(Times_Crustal_Abundance)",
+                      "expression": "AVG(`Times_Crustal_Abundance`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "ZONE_GDA2020",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "ZONE_GDA2020"
+                },
+                "y": {
+                  "fieldName": "avg(Times_Crustal_Abundance)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Average Times_Crustal_Abundance"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Average Times Crustal Abundance per zone"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 13,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

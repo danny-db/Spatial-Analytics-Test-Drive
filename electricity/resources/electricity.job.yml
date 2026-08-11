@@ -1,0 +1,13 @@
+# Job — runs the electricity medallion pipeline.
+#
+# A single pipeline_task orchestrates the full bronze -> silver -> gold refresh.
+# No schedule is defined (on-demand); add a `trigger`/`schedule` block to automate.
+
+resources:
+  jobs:
+    electricity_medallion_job:
+      name: electricity_medallion_job
+      tasks:
+        - task_key: refresh_medallion
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.electricity_medallion.id}

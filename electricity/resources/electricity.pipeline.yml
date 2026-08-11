@@ -1,0 +1,28 @@
+# Lakeflow Declarative Pipeline — electricity medallion.
+#
+# Serverless pipeline that publishes to Unity Catalog. The default schema is the
+# electricity schema; bronze/silver boundary tables use fully-qualified names to
+# publish into the digital_boundary schema within the same catalog.
+
+resources:
+  pipelines:
+    electricity_medallion:
+      name: electricity_medallion
+      serverless: true
+      catalog: ${var.catalog}
+      schema: ${var.electricity_schema}
+      channel: PREVIEW
+
+      # geopandas is required by the bronze layer to read shapefiles.
+      environment:
+        dependencies:
+          - geopandas
+
+      # Volume paths consumed by src/pipelines/01_bronze.py via spark.conf.
+      configuration:
+        electricity.shp_volume: ${var.shp_volume}
+        electricity.boundary_volume: ${var.boundary_volume}
+
+      libraries:
+        - glob:
+            include: ../src/pipelines/**

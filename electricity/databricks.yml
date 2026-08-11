@@ -1,0 +1,36 @@
+# Databricks Asset Bundle — Electricity Spatial Medallion
+#
+# Deploys a job with a single Lakeflow Declarative Pipeline task that builds the
+# Australian electricity-transmission medallion (bronze -> silver -> gold) in the
+# `geo` Unity Catalog. See README.md for datasets, provenance, and run commands.
+
+bundle:
+  name: electricity_spatial
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog to publish medallion tables to.
+    default: geo
+  electricity_schema:
+    description: Default schema for the transmission-network tables.
+    default: electricity
+  boundary_schema:
+    description: Schema for the ABS digital-boundary tables.
+    default: digital_boundary
+  shp_volume:
+    description: Volume path holding the Digital Atlas transmission shapefiles.
+    default: /Volumes/geo/electricity/shp
+  boundary_volume:
+    description: Volume path holding the ABS ASGS digital-boundary shapefiles.
+    default: /Volumes/geo/digital_boundary/asgs_ed_3
+
+targets:
+  dev:
+    mode: development
+    default: true
+    # Set your workspace host here, or pass --profile <name> at deploy time.
+    # workspace:
+    #   host: https://<your-workspace>.cloud.databricks.com

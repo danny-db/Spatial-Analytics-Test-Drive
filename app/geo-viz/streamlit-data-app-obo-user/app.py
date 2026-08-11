@@ -113,7 +113,7 @@ st.sidebar.header("Configuration")
 # Table configuration
 table_name = st.sidebar.text_input(
     "Table Name:",
-    value="danny_catalog.vicmap_schema.silver_road_infra",
+    value="vrstdptrainingcat01.dannywong.silver_road_infra",
     placeholder="catalog.schema.table",
     help="Enter the Unity Catalog table name"
 )

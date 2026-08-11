@@ -1,0 +1,60 @@
+resources:
+  jobs:
+    weather_risk_job:
+      name: weather_risk_job
+      description: |
+        Weather Risk medallion pipeline job with setup and refresh stages.
+
+        Task 1 (setup): Idempotently creates catalog.schema and validates prerequisites
+        Task 2 (refresh_medallion): Runs the Lakeflow pipeline to refresh bronze → silver → gold layers
+
+      tasks:
+        # Task 1: Setup — create schema, validate prerequisites
+        - task_key: setup
+          description: |
+            Setup task: Create catalog.schema, verify prerequisites.
+            - Creates geo.weather_risk schema if not exists
+            - Verifies geo.electricity.silver_transmission_line exists (asset layer dependency)
+            - Safe to re-run (idempotent)
+
+          notebook_task:
+            notebook_path: ../src/setup/00_setup
+
+          new_cluster:
+            spark_version: 15.4.x-scala2.12  # Latest DBR with Mosaic
+            node_type_id: i3.xlarge            # Multi-core for setup parallelism
+            num_workers: 1
+            aws_attributes:
+              availability: SPOT_WITH_FALLBACK
+
+          timeout_seconds: 1800
+          max_retries: 1
+
+        # Task 2: Refresh medallion — run Lakeflow pipeline
+        - task_key: refresh_medallion
+          description: |
+            Pipeline refresh task: Ingest GFS forecast data and overlay with network assets.
+            - Reads GRIB2 from s3://noaa-gfs-bdp-pds/ for configured cycle
+            - Filters to Australian bounding box and risk variables
+            - Materializes bronze → silver → gold layers
+            - Computes per-asset risk scores and alerts
+
+          depends_on:
+            - task_key: setup
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.weather_risk.id}
+
+          timeout_seconds: 3600
+          max_retries: 0
+
+      # Job-level configuration
+      max_concurrent_runs: 1  # Ensure only one run at a time
+      timeout_seconds: 5400   # 90 minutes total timeout
+
+      # Schedule (optional): Configure job to run on a cadence
+      # Example: 4x daily at 02, 08, 14, 20 UTC to align with GFS release times
+      # schedule:
+      #   quartz_cron_expression: "0 0 2,8,14,20 * * ?"
+      #   pause_status: UNPAUSED
+      # Note: Uncomment schedule block to enable recurring job

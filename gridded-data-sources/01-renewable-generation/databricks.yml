@@ -1,0 +1,43 @@
+bundle:
+  name: renewable_generation
+  # Deployed to: dev environment (see targets below)
+
+include:
+  - resources/*.yml
+
+variables:
+  # Databricks Catalog & Schema
+  catalog:
+    description: Unity Catalog name
+    default: geo
+
+  schema:
+    description: Schema name within catalog
+    default: renewable_energy
+
+  # Data ingestion parameters (ISO format dates)
+  start_date:
+    description: Start date for data ingestion (YYYYMMDD)
+    default: "20230101"
+
+  end_date:
+    description: End date for data ingestion (YYYYMMDD)
+    default: "20231231"
+
+  # NREL API secret configuration
+  nrel_secret_scope:
+    description: Databricks secrets scope containing NREL API key
+    default: renewable_energy
+
+  nrel_secret_key:
+    description: Secret key name for NREL API key
+    default: nrel_api_key
+
+# Development environment configuration
+targets:
+  dev:
+    mode: development
+    default: true
+    # Note: Uncomment and populate with your Databricks workspace host
+    # workspace:
+    #   host: https://your-workspace.cloud.databricks.com

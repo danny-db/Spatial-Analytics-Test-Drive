@@ -1,0 +1,46 @@
+resources:
+  pipelines:
+    demand_forecasting:
+      name: demand_forecasting_pipeline
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      channel: PREVIEW
+
+      # Configuration: Pass parameters to DLT pipeline
+      # These are accessed via spark.conf.get(...) in the pipeline code
+      configuration:
+        # Australian bounding box (comma-separated for string passing)
+        au_lat_south: ${var.au_lat_south}
+        au_lat_north: ${var.au_lat_north}
+        au_lon_west: ${var.au_lon_west}
+        au_lon_east: ${var.au_lon_east}
+
+        # ERA5 Zarr source
+        era5_zarr_path: ${var.era5_zarr_path}
+
+        # Date range (ISO 8601)
+        date_start: ${var.date_start}
+        date_end: ${var.date_end}
+
+        # Catalog and schema
+        catalog: ${var.catalog}
+        schema: ${var.schema}
+
+      # Libraries to include in pipeline execution
+      # glob pattern includes all Python and SQL files from src/pipelines/
+      libraries:
+        - glob:
+            include: ../src/pipelines/**
+
+      # Environment: Install dependencies needed for Bronze layer
+      # (xarray, zarr for ARCO-ERA5 Zarr access)
+      environment:
+        # Dependencies for ERA5 Zarr ingestion and data manipulation
+        dependencies:
+          - xarray==2024.1.1
+          - zarr==2.17.1
+          - gcsfs==2024.1.0
+          - rioxarray==0.15.0
+          - numpy==1.24.3
+          - pandas==2.0.3

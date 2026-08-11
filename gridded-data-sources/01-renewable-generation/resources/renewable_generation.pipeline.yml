@@ -1,0 +1,46 @@
+resources:
+  pipelines:
+    renewable_generation:
+      name: Renewable Generation Medallion Pipeline
+      serverless: true
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      channel: PREVIEW
+
+      # Specify target directory containing DLT notebook files
+      # Libraries are automatically discovered from src/pipelines/
+      libraries:
+        - glob:
+            include:
+              - ../src/pipelines/**
+
+      # Environment dependencies for Python notebooks (bronze layer)
+      # These packages are installed in the DLT cluster environment
+      environment:
+        dependencies:
+          - requests
+          - xarray
+          - pandas
+          - h5py
+
+      # Configuration passed to notebooks via spark.conf
+      # Bronze layer reads dates and secrets from configuration
+      configuration:
+        # Ingestion date range (ISO format)
+        spark.databricks.renewable_generation.start_date: ${var.start_date}
+        spark.databricks.renewable_generation.end_date: ${var.end_date}
+
+        # Secret scope for API credentials
+        spark.databricks.renewable_generation.nrel_secret_scope: ${var.nrel_secret_scope}
+        spark.databricks.renewable_generation.nrel_secret_key: ${var.nrel_secret_key}
+
+        # Catalog and schema configuration
+        spark.databricks.renewable_generation.catalog: ${var.catalog}
+        spark.databricks.renewable_generation.schema: ${var.schema}
+
+        # Australian bounding box (latitude: -44 to -10, longitude: 112 to 154)
+        # These can be parameterized for grid expansion
+        spark.databricks.renewable_generation.lat_min: "-44"
+        spark.databricks.renewable_generation.lat_max: "-10"
+        spark.databricks.renewable_generation.lon_min: "112"
+        spark.databricks.renewable_generation.lon_max: "154"

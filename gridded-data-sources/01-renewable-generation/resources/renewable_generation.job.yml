@@ -1,0 +1,33 @@
+resources:
+  jobs:
+    renewable_generation_job:
+      name: Renewable Generation Data Pipeline
+      max_concurrent_runs: 1
+      # Schedule (optional): uncomment to run on a schedule
+      # schedule:
+      #   quartz_cron_expression: "0 2 * * ?" # 2 AM daily
+      #   timezone_id: "UTC"
+
+      tasks:
+        # Task 1: Setup and verification
+        # Runs once to initialize catalog, schema, verify secrets, etc.
+        - task_key: setup
+          description: Initialize catalog, schema, and verify data source connectivity
+          notebook_task:
+            notebook_path: ../src/setup/00_setup
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "i3.xlarge"
+            num_workers: 1
+            spark_conf:
+              spark.databricks.delta.schema.autoMerge.enabled: "true"
+
+        # Task 2: Run the medallion pipeline (bronze → silver → gold)
+        # Depends on setup completion
+        - task_key: refresh_medallion
+          description: Run DLT pipeline for medallion architecture (bronze/silver/gold)
+          depends_on:
+            - task_key: setup
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.renewable_generation.id}
+            # full_refresh: false  # Uncomment to force full refresh of all tables

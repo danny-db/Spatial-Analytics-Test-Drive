@@ -1,0 +1,59 @@
+resources:
+  pipelines:
+    weather_risk:
+      name: weather_risk_medallion_pipeline
+      description: |
+        Lakeflow declarative pipeline for NOAA GFS weather forecast medallion architecture.
+
+        Stages:
+        - Bronze: Raw GRIB2 ingestion from AWS Open Data (s3://noaa-gfs-bdp-pds/)
+        - Silver: Clean, normalize, and add derived metrics (wind speed, temperature in °C, geometry)
+        - Gold: Overlay with transmission line assets via H3 spatial join; compute risk scores
+
+      serverless: true
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      channel: PREVIEW
+
+      # Environment dependencies for the Python bronze layer (GRIB2 ingestion).
+      environment:
+        dependencies:
+          - xarray
+          - cfgrib
+          - s3fs
+          - rasterio
+          - netCDF4
+          - pandas
+          - numpy
+
+      # Configuration passed to the pipeline code via spark.conf.get(...).
+      configuration:
+        # Catalog and schema (also available to code via spark.conf).
+        catalog: ${var.catalog}
+        schema: ${var.schema}
+
+        # Geographic bounds for GFS filtering
+        au_lat_min: ${var.au_lat_min}
+        au_lat_max: ${var.au_lat_max}
+        au_lon_min: ${var.au_lon_min}
+        au_lon_max: ${var.au_lon_max}
+
+        # GFS data source parameters
+        gfs_s3_bucket: ${var.gfs_s3_bucket}
+        gfs_latest_cycle_date: ${var.gfs_latest_cycle_date}
+        gfs_latest_cycle_hour: ${var.gfs_latest_cycle_hour}
+
+        # Risk alert thresholds
+        gust_threshold_ms: ${var.gust_threshold_ms}
+        wind_speed_threshold_ms: ${var.wind_speed_threshold_ms}
+        precip_threshold_mm: ${var.precip_threshold_mm}
+        temp_threshold_c: ${var.temp_threshold_c}
+
+        # Spatial parameters
+        h3_resolution: ${var.h3_resolution}
+        line_buffer_degrees: ${var.line_buffer_degrees}
+
+      # Pipeline source code (bronze .py + silver/gold .sql), relative to this YAML.
+      libraries:
+        - glob:
+            include: ../src/pipelines/**

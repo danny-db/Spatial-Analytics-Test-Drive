@@ -1,0 +1,86 @@
+bundle:
+  name: weather_risk
+  description: |
+    Databricks Asset Bundle for NOAA GFS weather forecast ingestion and network asset risk overlay.
+    Ingests GRIB2 forecast data from AWS Open Data (s3://noaa-gfs-bdp-pds/), applies spatial
+    join with electricity transmission lines, and computes risk scores for wind gusts,
+    sustained wind, precipitation, and heat hazards.
+
+include:
+  - resources/*.yml
+
+variables:
+  # Catalog and schema configuration
+  catalog:
+    description: Unity Catalog name
+    default: geo
+
+  schema:
+    description: Schema name for weather risk tables
+    default: weather_risk
+
+  # Australian geographic bounds for GFS filtering
+  au_lat_min:
+    description: Australian latitude minimum (southern bound)
+    default: -44
+
+  au_lat_max:
+    description: Australian latitude maximum (northern bound)
+    default: -10
+
+  au_lon_min:
+    description: Australian longitude minimum (western bound)
+    default: 112
+
+  au_lon_max:
+    description: Australian longitude maximum (eastern bound)
+    default: 154
+
+  # NOAA GFS forecast parameters
+  # Note: GFS is updated 4x daily at 00/06/12/18 UTC
+  gfs_s3_bucket:
+    description: AWS Open Data bucket for NOAA GFS GRIB2 files
+    default: s3://noaa-gfs-bdp-pds/
+
+  gfs_latest_cycle_date:
+    description: Latest GFS cycle date (YYYYMMDD) - set by job/orchestration
+    default: "20240115"
+
+  gfs_latest_cycle_hour:
+    description: Latest GFS cycle hour (00, 06, 12, or 18)
+    default: "00"
+
+  # Risk thresholds for alert generation (in Gold layer)
+  gust_threshold_ms:
+    description: Wind gust threshold for alert (m/s)
+    default: 20
+
+  wind_speed_threshold_ms:
+    description: Sustained wind speed threshold for alert (m/s)
+    default: 15
+
+  precip_threshold_mm:
+    description: Precipitation threshold for alert (mm/6h)
+    default: 10
+
+  temp_threshold_c:
+    description: Temperature threshold for heat alert (°C)
+    default: 35
+
+  # H3 and spatial parameters
+  h3_resolution:
+    description: H3 hexagon resolution for spatial join (9 = ~172 km²)
+    default: 9
+
+  line_buffer_degrees:
+    description: Buffer around transmission lines in decimal degrees (~500m = 0.0045°)
+    default: 0.0045
+
+targets:
+  dev:
+    mode: development
+    default: true
+    # Workspace configuration (update with your workspace host)
+    # workspace:
+    #   host: https://your-workspace-url.cloud.databricks.com
+    # Note: Uncomment and set workspace.host to enable workspace deployment

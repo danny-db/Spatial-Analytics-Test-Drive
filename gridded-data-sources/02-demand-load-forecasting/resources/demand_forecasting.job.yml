@@ -1,0 +1,38 @@
+resources:
+  jobs:
+    demand_forecasting_job:
+      name: demand_forecasting_job
+      description: Demand forecasting medallion architecture job with Bronze/Silver/Gold medallion layers
+
+      tasks:
+        # Task 1: Setup - Create catalog, schema, and verify prerequisites
+        - task_key: setup
+          description: Setup task - create catalog/schema and verify prerequisites
+          notebook_task:
+            notebook_path: ../src/setup/00_setup
+            base_parameters:
+              catalog: ${var.catalog}
+              schema: ${var.schema}
+
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "i3.xlarge"
+            num_workers: 1
+
+          # Timeout: 10 minutes (setup should be quick)
+          timeout_seconds: 600
+
+        # Task 2: Refresh medallion pipeline - Execute Bronze/Silver/Gold transformations
+        # Depends on setup task completing successfully
+        - task_key: refresh_medallion
+          description: Refresh medallion pipeline - execute Bronze ingestion and Silver/Gold transformations
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.demand_forecasting.id}
+
+          # Depend on setup task
+          depends_on:
+            - task_key: setup
+
+      # Job-level configuration
+      max_concurrent_runs: 1  # Prevent concurrent runs to avoid schema conflicts
+      timeout_seconds: 7200   # 2-hour timeout for entire job

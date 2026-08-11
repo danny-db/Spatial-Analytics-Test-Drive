@@ -1,0 +1,76 @@
+bundle:
+  name: demand_forecasting
+
+include:
+  - resources/*.yml
+
+variables:
+  # Catalog & Schema configuration
+  catalog:
+    description: Unity Catalog for geospatial and weather data
+    default: geo
+
+  schema:
+    description: Schema for weather and demand forecasting data
+    default: weather
+
+  # Australian bounding box (in decimal degrees)
+  au_lat_south:
+    description: Southern boundary of Australia bounding box
+    default: -44.0
+
+  au_lat_north:
+    description: Northern boundary of Australia bounding box
+    default: -10.0
+
+  au_lon_west:
+    description: Western boundary of Australia bounding box
+    default: 112.0
+
+  au_lon_east:
+    description: Eastern boundary of Australia bounding box
+    default: 154.0
+
+  # ERA5 Zarr data source configuration
+  era5_zarr_path:
+    description: ARCO-ERA5 Zarr store path on GCS (public, anonymous access)
+    default: gs://gcp-public-data-arco-era5/ar/full_37-1h-0p25deg-chunk-1.zarr-v3
+
+  # ERA5 variables to extract
+  era5_variables:
+    description: List of ERA5 variables to ingest from Zarr store
+    default:
+      - 2m_temperature
+      - 2m_dewpoint_temperature
+      - surface_solar_radiation_downwards
+      - 10m_u_component_of_wind
+      - 10m_v_component_of_wind
+      - 100m_u_component_of_wind
+      - 100m_v_component_of_wind
+
+  # NEM regions (Australian National Electricity Market)
+  nem_regions:
+    description: List of NEM regions for regional aggregation
+    default:
+      - NSW1
+      - QLD1
+      - VIC1
+      - SA1
+      - TAS1
+
+  # Date range for ingestion (ISO 8601 format, inclusive)
+  date_start:
+    description: Start date for ERA5 data ingestion (YYYY-MM-DD)
+    default: "2023-01-01"
+
+  date_end:
+    description: End date for ERA5 data ingestion (YYYY-MM-DD)
+    default: "2023-12-31"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    # Uncomment and set your workspace host:
+    # workspace:
+    #   host: https://your-workspace.cloud.databricks.com

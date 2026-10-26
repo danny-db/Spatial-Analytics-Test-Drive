@@ -1,0 +1,28 @@
+# One serverless job: ingest → raster (GeoBrix) → vector join → validate → grant the app read access.
+# No compute block: notebook tasks run on serverless. Each notebook pins serverless environment 6 in its metadata.
+resources:
+  jobs:
+    climate_exposure_pipeline:
+      name: climate-exposure-pipeline
+      max_concurrent_runs: 1
+      parameters:
+        - { name: catalog, default: "${var.catalog}" }
+        - { name: schema, default: "${var.schema}" }
+        - { name: volume, default: "${var.volume}" }
+      tasks:
+        - task_key: ingest_open_data
+          notebook_task: { notebook_path: ../src/notebooks/01_ingest_open_data.ipynb }
+        - task_key: raster_geobrix
+          depends_on: [{ task_key: ingest_open_data }]
+          notebook_task: { notebook_path: ../src/notebooks/02_raster_geobrix.ipynb }
+        - task_key: vector_join_exposure
+          depends_on: [{ task_key: raster_geobrix }]
+          notebook_task: { notebook_path: ../src/notebooks/03_vector_join_exposure.ipynb }
+        - task_key: validate
+          depends_on: [{ task_key: vector_join_exposure }]
+          notebook_task: { notebook_path: ../src/notebooks/04_validate.ipynb }
+        - task_key: grant_app_access
+          depends_on: [{ task_key: validate }]
+          notebook_task:
+            notebook_path: ../src/notebooks/05_grant_app_access.ipynb
+            base_parameters: { app_name: "${resources.apps.climate_exposure_app.name}" }

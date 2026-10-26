@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Climate Exposure Explorer · Databricks + GeoBrix</title>
+<link rel="stylesheet" href="/static/style.css" />
+<script type="importmap">
+  { "imports": { "three": "/static/vendor/three.module.js" } }
+</script>
+</head>
+<body>
+  <canvas id="scene" aria-label="3D hexagon map of Australia showing projected climate"></canvas>
+
+  <header class="title">
+    <h1>Australia's climate, hex by hex</h1>
+    <p>BARPA-R downscaled CMIP6 (BoM / Australian Climate Service) × ABS population · processed with <b>GeoBrix</b> on Databricks serverless</p>
+  </header>
+
+  <aside class="panel left">
+    <section>
+      <h2>Scenario</h2>
+      <div class="seg" id="scenario">
+        <button data-v="historical">Baseline<small>2001-10</small></button>
+        <button data-v="ssp126">SSP1-2.6<small>low</small></button>
+        <button data-v="ssp370" class="on">SSP3-7.0<small>high</small></button>
+        <button data-v="ssp585">SSP5-8.5<small>very high</small></button>
+      </div>
+    </section>
+    <section id="periodBox">
+      <h2>Decade</h2>
+      <div class="seg" id="period">
+        <button data-v="2041-2050">2041-50</button>
+        <button data-v="2091-2100" class="on">2091-2100</button>
+      </div>
+    </section>
+    <section>
+      <h2>Show</h2>
+      <div class="metrics" id="metric">
+        <label><input type="radio" name="m" value="tasmax_djf" checked /> Summer max temperature <em>°C</em></label>
+        <label><input type="radio" name="m" value="d_tasmax_djf" /> Summer warming vs 2001-10 <em>Δ °C</em></label>
+        <label><input type="radio" name="m" value="hot_months" /> Hot months a year <em>≥35 °C</em></label>
+        <label><input type="radio" name="m" value="pct_pr" /> Rainfall change <em>%</em></label>
+        <label><input type="radio" name="m" value="exposure" /> People × warming <em>height = people</em></label>
+      </div>
+    </section>
+    <button id="play" class="play">▶ Play the century</button>
+    <p class="hint" id="hint"></p>
+  </aside>
+
+  <aside class="panel right">
+    <section class="kpis">
+      <div class="kpi"><span class="k-label">Population-weighted summer warming</span><span class="k-val" id="kWarm">–</span></div>
+      <div class="kpi"><span class="k-label">People where summer max ≥ 35 °C</span><span class="k-val" id="kHot">–</span><span class="k-sub" id="kHotSub"></span></div>
+    </section>
+    <section>
+      <h2>People exposed to ≥ <span id="minW">3.0</span> °C summer warming</h2>
+      <input type="range" id="minWarm" min="0.5" max="6" step="0.5" value="3" aria-label="minimum warming" />
+      <div id="bars" class="bars"></div>
+      <p class="fn">via UC function <code id="fnName">heat_exposure()</code></p>
+    </section>
+    <section>
+      <h2>Most exposed SA2s <small>(people × warming)</small></h2>
+      <ol id="top" class="top"></ol>
+    </section>
+  </aside>
+
+  <div class="legend" id="legend">
+    <div class="l-title" id="lTitle"></div>
+    <div class="l-bar" id="lBar"></div>
+    <div class="l-ticks" id="lTicks"></div>
+  </div>
+
+  <div class="tooltip" id="tip" role="tooltip"></div>
+  <div class="loading" id="loading">Loading 4,881 H3 cells from Unity Catalog…</div>
+
+  <footer class="attrib">
+    Data: BARPA-R ACCESS-CM2 r4i1p1f1 (Bureau of Meteorology, CC BY 4.0) · ABS ASGS 2021 &amp; ERP 2025 (CC BY 4.0).
+    Single-model demo, not an ACS ensemble product. H3 resolution 4 (~1,770 km²).
+  </footer>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+# Databricks Asset Bundle: climate exposure with GeoBrix (BARPA-R × ABS) on serverless
+#
+#   databricks bundle deploy  -t dev --var="catalog=<catalog>" --var="warehouse_id=<sql-warehouse-id>"
+#   databricks bundle run climate_exposure_pipeline -t dev --var=...   # builds the data (about 15 min)
+#   databricks bundle run climate_exposure_app -t dev --var=...        # starts the app
+#
+bundle:
+  name: climate-exposure-geobrix
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Existing Unity Catalog catalog to write into (you need CREATE SCHEMA on it)
+  schema:
+    description: Schema created by the pipeline for tables, functions and the raw-data volume
+    default: climate_exposure
+  volume:
+    description: Managed volume (inside the schema) for downloaded source files and COG outputs
+    default: raw
+  warehouse_id:
+    description: SQL warehouse the app queries (serverless recommended)
+  app_name:
+    description: Name of the Databricks App (lowercase letters, numbers and hyphens)
+    default: climate-exposure-explorer
+
+targets:
+  dev:
+    mode: development
+    default: true

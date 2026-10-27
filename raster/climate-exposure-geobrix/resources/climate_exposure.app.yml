@@ -1,0 +1,16 @@
+# Databricks App: FastAPI backend + Three.js front end over the gold tables.
+resources:
+  apps:
+    climate_exposure_app:
+      name: ${var.app_name}
+      description: 3D H3 map of projected climate change and population exposure (BARPA-R × ABS, GeoBrix)
+      source_code_path: ../src/app
+      config:
+        command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+        env:
+          - { name: DATABRICKS_WAREHOUSE_ID, value_from: sql-warehouse }
+          - { name: CLIMATE_CATALOG, value: "${var.catalog}" }
+          - { name: CLIMATE_SCHEMA, value: "${var.schema}" }
+      resources:
+        - name: sql-warehouse
+          sql_warehouse: { id: "${var.warehouse_id}", permission: CAN_USE }

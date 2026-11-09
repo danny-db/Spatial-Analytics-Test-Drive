@@ -138,6 +138,10 @@ Then drop the data: `DROP SCHEMA <catalog>.climate_exposure CASCADE;`
 - Lineage to the source files in the Volume is only recorded for native Spark reads (for example `read_files`). The GeoBrix and pandas readers used here don't report it, so the lineage graph starts at the first table.
 - GDA2020 and WGS 84 differ by under 2 m, so the boundaries are treated as lon/lat for H3.
 
+## Data collection
+
+To improve users' experience and this asset's quality, the app reports a usage event when a page is opened. This information is captured for product improvement only, not for marketing purposes, and doesn't contain PII: the email of Databricks users is hashed, and nobody else's is sent. By using this asset, you consent to this data collection. If you wish to disable it, set the environment variable `DBDEMOS_TRACKER_DISABLED=1` (e.g. add `{ name: DBDEMOS_TRACKER_DISABLED, value: "1" }` to the app's `env` in `resources/climate_exposure.app.yml`).
+
 ## Attribution
 
 BARPA-R data: Bureau of Meteorology, CC BY 4.0. ASGS boundaries and Regional Population: Australian Bureau of Statistics, CC BY 4.0.

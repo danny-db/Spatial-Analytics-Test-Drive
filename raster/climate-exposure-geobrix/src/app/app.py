@@ -4,6 +4,7 @@ FastAPI serves a Three.js front end (static/) plus a small JSON API over the gol
 GeoBrix notebooks. Queries run on a SQL warehouse via the Statement Execution API, using the app's
 service principal. Catalog, schema and warehouse come from the bundle (resources/climate_exposure.app.yml). Results are cached in memory: the data is static per build.
 """
+import logging
 import os
 import time
 from functools import lru_cache
@@ -24,6 +25,15 @@ FQ = f"{CATALOG}.{SCHEMA}"
 w = WorkspaceClient()
 app = FastAPI(title="Climate Exposure Explorer")
 app.add_middleware(GZipMiddleware, minimum_size=1000)
+# Usage tracking, see "Data collection" in the README. Only "/" is matched, so it counts page loads,
+# not API or static calls. Added after GZip so it wraps it and responses stay byte-identical.
+if os.getenv("DBDEMOS_TRACKER_DISABLED") != "1":
+    try:
+        from dbdemos_tracker import Tracker
+        Tracker.add_tracker_fastapi(app, "climate-exposure-explorer-with-geobrix-barpa-r-abs-5f4b",
+                                    workspace_client=w, patterns=[r"^/$"])
+    except Exception as e:  # tracking must never stop the app
+        logging.getLogger(__name__).warning("Usage tracking not enabled: %s", e)
 STATIC = os.path.join(os.path.dirname(__file__), "static")
 
 
